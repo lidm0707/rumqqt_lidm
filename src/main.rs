@@ -6,8 +6,8 @@ use rumqttd::{Broker, Config, ConnectionSettings, RouterConfig, ServerSettings, 
 const BROKER_ID: usize = 0;
 const LISTEN_ADDR: &str = "0.0.0.0:8883";
 const SERVER_NAME: &str = "mqtt-tls";
-const CERT_PATH: &str = "certs/cert.pem";
-const KEY_PATH: &str = "certs/key.pem";
+const CERT_PATH: &str = "certs/server.cert.pem";
+const KEY_PATH: &str = "certs/server.key.pem";
 const CONNECTION_TIMEOUT_MS: u16 = 6000;
 const MAX_PAYLOAD_SIZE: usize = 2048;
 const MAX_INFLIGHT_COUNT: usize = 100;
