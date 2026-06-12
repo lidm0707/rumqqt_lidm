@@ -1,0 +1,7 @@
+[package]
+name = "rumqqt_lidm"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rumqttd = "0.20.0"

@@ -1,0 +1,13 @@
+[v4.2]
+
+name = "tls"
+
+listen = "0.0.0.0:8883"
+
+next_connection_delay_ms = 1
+connections = 1000
+
+[v4.2.tls]
+certpath = "/etc/rumqttd/certs/broker.cert.pem"
+keypath = "/etc/rumqttd/certs/broker.key.pem"
+capath = "/etc/rumqttd/certs/ca.cert.pem"
