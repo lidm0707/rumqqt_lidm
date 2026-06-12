@@ -1622,6 +1622,7 @@ dependencies = [
  "rumqttd",
  "rustls-pemfile",
  "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]

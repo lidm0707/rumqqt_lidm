@@ -61,6 +61,8 @@ fn build_config() -> Config {
 }
 
 fn main() {
+    tracing_subscriber::fmt::init();
+
     let config = build_config();
     let mut broker = Broker::new(config);
 
