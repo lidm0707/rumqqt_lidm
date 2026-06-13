@@ -1620,7 +1620,6 @@ version = "0.1.0"
 dependencies = [
  "rumqttc",
  "rumqttd",
- "rustls-pemfile",
  "tokio",
  "tracing-subscriber",
 ]

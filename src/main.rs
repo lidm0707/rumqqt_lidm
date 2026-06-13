@@ -1,13 +1,11 @@
 use std::collections::HashMap;
 use std::net::SocketAddr;
 
-use rumqttd::{Broker, Config, ConnectionSettings, RouterConfig, ServerSettings, TlsConfig};
+use rumqttd::{Broker, Config, ConnectionSettings, RouterConfig, ServerSettings};
 
 const BROKER_ID: usize = 0;
-const LISTEN_ADDR: &str = "0.0.0.0:8883";
-const SERVER_NAME: &str = "mqtt-tls";
-const CERT_PATH: &str = "certs/server.cert.pem";
-const KEY_PATH: &str = "certs/server.key.pem";
+const LISTEN_ADDR: &str = "0.0.0.0:1883";
+const SERVER_NAME: &str = "mqtt-tcp";
 const CONNECTION_TIMEOUT_MS: u16 = 6000;
 const MAX_PAYLOAD_SIZE: usize = 2048;
 const MAX_INFLIGHT_COUNT: usize = 100;
@@ -34,11 +32,7 @@ fn build_config() -> Config {
             ServerSettings {
                 name: SERVER_NAME.to_string(),
                 listen: LISTEN_ADDR.parse::<SocketAddr>().unwrap(),
-                tls: Some(TlsConfig::Rustls {
-                    capath: None,
-                    certpath: CERT_PATH.to_string(),
-                    keypath: KEY_PATH.to_string(),
-                }),
+                tls: None,
                 next_connection_delay_ms: NEXT_CONNECTION_DELAY_MS,
                 connections: ConnectionSettings {
                     connection_timeout_ms: CONNECTION_TIMEOUT_MS,
