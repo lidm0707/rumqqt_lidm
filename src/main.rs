@@ -1,11 +1,13 @@
 use std::collections::HashMap;
 use std::net::SocketAddr;
 
-use rumqttd::{Broker, Config, ConnectionSettings, RouterConfig, ServerSettings};
+use rumqttd::{Broker, Config, ConnectionSettings, RouterConfig, ServerSettings, Strategy};
 
 const BROKER_ID: usize = 0;
 const LISTEN_ADDR: &str = "0.0.0.0:1883";
+const LISTEN_ADDR_V5: &str = "0.0.0.0:1884";
 const SERVER_NAME: &str = "mqtt-tcp";
+const SERVER_NAME_V5: &str = "mqtt-tcp-v5";
 const CONNECTION_TIMEOUT_MS: u16 = 6000;
 const MAX_PAYLOAD_SIZE: usize = 2048;
 const MAX_INFLIGHT_COUNT: usize = 100;
@@ -14,6 +16,26 @@ const MAX_CONNECTIONS: usize = 1000;
 const MAX_OUTGOING_PACKET_COUNT: u64 = 200;
 const MAX_SEGMENT_SIZE: usize = 1024 * 1024;
 const MAX_SEGMENT_COUNT: usize = 10;
+
+fn server(name: &str, listen: &str) -> (String, ServerSettings) {
+    (
+        name.to_string(),
+        ServerSettings {
+            name: name.to_string(),
+            listen: listen.parse::<SocketAddr>().unwrap(),
+            tls: None,
+            next_connection_delay_ms: NEXT_CONNECTION_DELAY_MS,
+            connections: ConnectionSettings {
+                connection_timeout_ms: CONNECTION_TIMEOUT_MS,
+                max_payload_size: MAX_PAYLOAD_SIZE,
+                max_inflight_count: MAX_INFLIGHT_COUNT,
+                auth: None,
+                external_auth: None,
+                dynamic_filters: false,
+            },
+        },
+    )
+}
 
 fn build_config() -> Config {
     Config {
@@ -25,26 +47,10 @@ fn build_config() -> Config {
             max_segment_count: MAX_SEGMENT_COUNT,
             custom_segment: None,
             initialized_filters: None,
-            shared_subscriptions_strategy: rumqttd::Strategy::default(),
+            shared_subscriptions_strategy: Strategy::default(),
         },
-        v4: Some(HashMap::from([(
-            SERVER_NAME.to_string(),
-            ServerSettings {
-                name: SERVER_NAME.to_string(),
-                listen: LISTEN_ADDR.parse::<SocketAddr>().unwrap(),
-                tls: None,
-                next_connection_delay_ms: NEXT_CONNECTION_DELAY_MS,
-                connections: ConnectionSettings {
-                    connection_timeout_ms: CONNECTION_TIMEOUT_MS,
-                    max_payload_size: MAX_PAYLOAD_SIZE,
-                    max_inflight_count: MAX_INFLIGHT_COUNT,
-                    auth: None,
-                    external_auth: None,
-                    dynamic_filters: false,
-                },
-            },
-        )])),
-        v5: None,
+        v4: Some(HashMap::from([server(SERVER_NAME, LISTEN_ADDR)])),
+        v5: Some(HashMap::from([server(SERVER_NAME_V5, LISTEN_ADDR_V5)])),
         ws: None,
         cluster: None,
         console: None,
